@@ -13,10 +13,7 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 
 //TODO
-//Either figure out a search mechanic or keep going with the map thing
-//Test on other screen devices
-//Dynamic background
-//Look into animation for some things?
+//Fix Map. Draggable marker isn't working
 
 export default function CityWeather(props) {
 
