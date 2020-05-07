@@ -30,8 +30,8 @@ export default function CityWeather(props) {
     React.useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
-        const lat = props.route.params.location.coords.latitude
-        const lon = props.route.params.location.coords.longitude
+        const lat = props.location.coords.latitude
+        const lon = props.location.coords.longitude
 
         function loadData() {
             //Current Weather

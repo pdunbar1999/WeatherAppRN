@@ -5,11 +5,6 @@ import { Ionicons } from '@expo/vector-icons';
 import CityWeather from './screens/CityWeather'
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Location from 'expo-location';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import mapTest from './screens/mapTest'
-
-const Tab = createMaterialTopTabNavigator();
 
 
 export default function App(props) {
@@ -61,12 +56,7 @@ export default function App(props) {
   } else {
 
     return (
-      <NavigationContainer style={styles.container}>
-        <Tab.Navigator tabBarPosition={'bottom'}>
-          <Tab.Screen name="Test" component={CityWeather} initialParams={{ location: location }} />
-          <Tab.Screen name="map" component={mapTest} initialParams={{ location: location }} />
-        </Tab.Navigator>
-      </NavigationContainer>
+      <CityWeather location={location} />
 
     )
   }
