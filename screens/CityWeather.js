@@ -10,6 +10,8 @@ import DailyWeather from '../components/DailyWeather'
 import WeatherInformation from '../components/weatherInformation'
 import { globalStyles } from '../assets/global'
 import EStyleSheet from 'react-native-extended-stylesheet';
+import * as actions from  '../redux/actions/testaction';
+import { useSelector, useDispatch } from 'react-redux'
 
 
 //TODO
@@ -19,6 +21,9 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 //Look into animation for some things?
 
 export default function CityWeather(props) {
+    const dispatch = useDispatch()
+
+    const test = useSelector(state => state.test.counter)
 
     const [currentWeatherData, setCurrentWeather] = React.useState(null);
     const [triHourlyWeatherData, setTriHourlyWeatherData] = React.useState(null);
@@ -98,14 +103,14 @@ export default function CityWeather(props) {
         const dayOfWeek = convertUnixToDayOfWeek(currentWeatherData.dt);
 
 
-
         return (
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.currentForecast}>
 
                     <Ionicons name="ios-search" visible={modalOpen} fade={1000} size={32} color="white" onPress={() => setModalOpen(true)} />
                     
-
+                    <Button title="Redux" onPress={() => dispatch(actions.changeCount(2))} />
+                    <Text style={styles.cityName}>{test}</Text>
                     <Text style={styles.cityName}>{cityName}</Text>
                     <Text style={styles.currentCityWeatherDescription}>{weatherDescription}</Text>
                     <View style={styles.currentCityTemperatureView}>

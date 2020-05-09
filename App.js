@@ -5,7 +5,17 @@ import { Ionicons } from '@expo/vector-icons';
 import CityWeather from './screens/CityWeather'
 import EStyleSheet from 'react-native-extended-stylesheet';
 import * as Location from 'expo-location';
+import { Provider } from 'react-redux';
+import { createStore, combineReducers } from 'redux';
+import testreducer from './redux/reducers/testreducer';
+import { composeWithDevTools } from 'redux-devtools-extension'
 
+const rootReducer = combineReducers({
+  test: testreducer
+})
+
+
+const store = createStore(rootReducer, composeWithDevTools());
 
 export default function App(props) {
   const [isFontLoadingComplete, setisFontLoadingComplete] = React.useState(false);
@@ -56,7 +66,10 @@ export default function App(props) {
   } else {
 
     return (
+      <Provider store={store}>
       <CityWeather location={location} />
+      </Provider>
+      
 
     )
   }
