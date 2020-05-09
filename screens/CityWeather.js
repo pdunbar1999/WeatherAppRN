@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, ScrollView, Modal, Button, TextInput } from 'react-native';
+import { View, Text, ScrollView, Button, TextInput } from 'react-native';
 import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 import HourlyWeather from '../components/HourlyWeather'
 import _ from 'lodash'
@@ -10,6 +10,9 @@ import DailyWeather from '../components/DailyWeather'
 import WeatherInformation from '../components/weatherInformation'
 import { globalStyles } from '../assets/global'
 import EStyleSheet from 'react-native-extended-stylesheet';
+import Footer from '../components/footer'
+import Modal from '../components/Modal'
+
 
 
 //TODO
@@ -24,14 +27,18 @@ export default function CityWeather(props) {
     const [triHourlyWeatherData, setTriHourlyWeatherData] = React.useState(null);
     const [dailyWeatherData, setDailyWeatherData] = React.useState(null)
     const [location, setLocation] = React.useState(props.location)
+    const [searchWeather, setSearchWeather] = React.useState(false)
     const [modalOpen, setModalOpen] = React.useState(false)
+
+    const [lat, setLat] = React.useState(props.location.coords.latitude)
+    const [lon, setLon] = React.useState(props.location.coords.longitude)
 
 
     React.useEffect(() => {
         const abortController = new AbortController()
         const signal = abortController.signal
-        const lat = props.location.coords.latitude
-        const lon = props.location.coords.longitude
+        // const lat = props.location.coords.latitude
+        // const lon = props.location.coords.longitude
 
         function loadData() {
             //Current Weather
@@ -97,51 +104,49 @@ export default function CityWeather(props) {
         const todaysLow = currentWeatherData.main.temp_min.toFixed(0)
         const dayOfWeek = convertUnixToDayOfWeek(currentWeatherData.dt);
 
-
-
         return (
-            <ScrollView contentContainerStyle={styles.container}>
-                <View style={styles.currentForecast}>
-
-                    <Ionicons name="ios-search" visible={modalOpen} fade={1000} size={32} color="white" onPress={() => setModalOpen(true)} />
-                    
-
-                    <Text style={styles.cityName}>{cityName}</Text>
-                    <Text style={styles.currentCityWeatherDescription}>{weatherDescription}</Text>
-                    <View style={styles.currentCityTemperatureView}>
-                        <Text style={styles.currentCityTemperature}>{currentTemperature}</Text>
-                        <MaterialCommunityIcons name="temperature-fahrenheit" size={40} color="white" />
+            <View style={{ flex: 1 }}>
+                <ScrollView contentContainerStyle={styles.container}>
+                    <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}/>
+                    <View style={styles.currentForecast}>
+                        <Text style={styles.cityName}>{cityName}</Text>
+                        <Text style={styles.currentCityWeatherDescription}>{weatherDescription}</Text>
+                        <View style={styles.currentCityTemperatureView}>
+                            <Text style={styles.currentCityTemperature}>{currentTemperature}</Text>
+                            <MaterialCommunityIcons name="temperature-fahrenheit" size={40} color="white" />
+                        </View>
                     </View>
-                </View>
 
-                <View style={globalStyles.dateAndHighLowView}>
-                    <Text style={globalStyles.dayOfWeek}>{dayOfWeek}</Text>
-                    <View style={globalStyles.HighLowView}>
-                        <Text style={globalStyles.todaysHigh}>{todaysHigh}</Text>
-                        <Text style={globalStyles.todaysLow}>{todaysLow}</Text>
+                    <View style={globalStyles.dateAndHighLowView}>
+                        <Text style={globalStyles.dayOfWeek}>{dayOfWeek}</Text>
+                        <View style={globalStyles.HighLowView}>
+                            <Text style={globalStyles.todaysHigh}>{todaysHigh}</Text>
+                            <Text style={globalStyles.todaysLow}>{todaysLow}</Text>
+                        </View>
                     </View>
-                </View>
 
-                <View style={styles.hourlyForecast}>
-                    <ScrollView horizontal={true} decelerationRate={0} snapToAlignment={"end"}>
-                        {triHourlyWeatherData.list.map(triHourlyWeatherData => {
-                            return <HourlyWeather triHourlyWeatherData={triHourlyWeatherData} key={Math.random(1000000)} />
+                    <View style={styles.hourlyForecast}>
+                        <ScrollView horizontal={true} decelerationRate={0} snapToAlignment={"end"}>
+                            {triHourlyWeatherData.list.map(triHourlyWeatherData => {
+                                return <HourlyWeather triHourlyWeatherData={triHourlyWeatherData} key={Math.random(1000000)} />
+                            })}
+
+                        </ScrollView>
+                    </View>
+
+                    <View style={styles.futureForecast}>
+                        {dailyWeatherData.list.filter(dailyWeatherData => dailyWeatherData.dt_txt.split(" ")[1] === "12:00:00").map(dailyWeatherData => {
+                            return <DailyWeather dailyWeatherData={dailyWeatherData} convertUnixToDayOfWeek={convertUnixToDayOfWeek} key={Math.random(100000)} />
                         })}
+                    </View>
 
-                    </ScrollView>
-                </View>
+                    <View style={styles.informationView}>
+                        <WeatherInformation currentWeatherData={currentWeatherData} />
+                    </View>
 
-                <View style={styles.futureForecast}>
-                    {dailyWeatherData.list.filter(dailyWeatherData => dailyWeatherData.dt_txt.split(" ")[1] === "12:00:00").map(dailyWeatherData => {
-                        return <DailyWeather dailyWeatherData={dailyWeatherData} convertUnixToDayOfWeek={convertUnixToDayOfWeek} key={Math.random(100000)} />
-                    })}
-                </View>
-
-                <View style={styles.informationView}>
-                    <WeatherInformation currentWeatherData={currentWeatherData} />
-                </View>
-
-            </ScrollView>
+                </ScrollView>
+                <Footer modalOpen={modalOpen} setModalOpen={setModalOpen} />
+            </View>
         )
     }
 }
@@ -149,7 +154,7 @@ export default function CityWeather(props) {
 const styles = EStyleSheet.create({
     container: {
         width: '100%',
-        backgroundColor: '#1C9CF6'
+        backgroundColor: '#1C9CF6',
 
     },
     currentForecast: {

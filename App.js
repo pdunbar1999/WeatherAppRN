@@ -56,7 +56,10 @@ export default function App(props) {
   } else {
 
     return (
-      <CityWeather location={location} />
+      <View style={styles.container}>
+        <CityWeather location={location} />
+      </View>
+      
 
     )
   }
