@@ -122,7 +122,7 @@ export default function CityWeather(props) {
         const dayOfWeek = convertUnixToDayOfWeek(currentWeatherData.dt);
 
         return (
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, backgroundColor: '#1C9CF6' }}>
                 <ScrollView contentContainerStyle={styles.container}>
                     <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}/>
                     <View style={styles.currentForecast}>
@@ -172,7 +172,6 @@ export default function CityWeather(props) {
 const styles = EStyleSheet.create({
     container: {
         width: '100%',
-        backgroundColor: '#1C9CF6',
 
     },
     currentForecast: {

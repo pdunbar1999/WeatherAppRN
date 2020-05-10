@@ -10,6 +10,8 @@ export const FETCH_DAILYWEATHER_PENDING = 'FETCH_DAILYWEATHER_PENDING'
 export const FETCH_DAILYWEATHER_SUCCESS = 'FETCH_DAILYWEATHER_SUCCESS'
 export const FETCH_DAILYWEATHER_ERROR = 'FETCH_DAILYWEATHER_ERROR'
 
+export const SWITCH_TEMP_TYPE = 'SWTICH_TEMP_TYPE'
+
 export const fetchCurrentWeatherPending = () => {
     return {
         type: FETCH_CURRENTWEATHER_PENDING
@@ -67,5 +69,12 @@ export const fetchDailyWeatherError = (error) => {
     return {
         type: FETCH_DAILYWEATHER_ERROR,
         error: error
+    }
+}
+
+export const switchTempType = (type) => {
+    return {
+        type: SWITCH_TEMP_TYPE,
+        type: type
     }
 }

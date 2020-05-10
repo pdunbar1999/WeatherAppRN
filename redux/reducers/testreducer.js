@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux';
 import { FETCH_CURRENTWEATHER_PENDING, FETCH_CURRENTWEATHER_ERROR, FETCH_CURRENTWEATHER_SUCCESS,
         FETCH_TRIHOURLYWEATHER_ERROR, FETCH_TRIHOURLYWEATHER_PENDING, FETCH_TRIHOURLYWEATHER_SUCCESS,
-        FETCH_DAILYWEATHER_ERROR, FETCH_DAILYWEATHER_PENDING, FETCH_DAILYWEATHER_SUCCESS } from '../actions/testaction'
+        FETCH_DAILYWEATHER_ERROR, FETCH_DAILYWEATHER_PENDING, FETCH_DAILYWEATHER_SUCCESS,
+        SWITCH_TEMP_TYPE } from '../actions/testaction'
 
 
 const INITIAL_STATE = {
@@ -70,6 +71,14 @@ export default (state = INITIAL_STATE, action) => {
                 ...state,
                 pending: false,
                 error: action.error
+            }
+        case SWITCH_TEMP_TYPE:
+            const newCurrentWeatherData = currentWeatherData
+            if(action.type === true) {
+                
+            }
+            return {
+                ...state
             }
 
         default:
