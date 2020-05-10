@@ -10,22 +10,27 @@ import DailyWeather from '../components/DailyWeather'
 import WeatherInformation from '../components/weatherInformation'
 import { globalStyles } from '../assets/global'
 import EStyleSheet from 'react-native-extended-stylesheet';
+
 import Footer from '../components/footer'
 import Modal from '../components/Modal'
 
+import * as actions from  '../redux/actions/testaction';
+import { useSelector, useDispatch } from 'react-redux'
 
 
-//TODO
-//Either figure out a search mechanic or keep going with the map thing
-//Test on other screen devices
-//Dynamic background
-//Look into animation for some things?
+
+//REDUX
+//When to make the initial call to the API
+//I'll need to make subsequent calls when the Search functionality is implemented
+//For now, I make one call. But I want redux for the Celsius and Farenhight shit
+                //Leave the API call here and then create an action to assign the state this new data
+                //Make API call in the reducers, might need react-thunk https://dev.to/markusclaus/fetching-data-from-an-api-using-reactredux-55ao
+
+//ITS WORKING IN REDUX NOW
 
 export default function CityWeather(props) {
-
-    const [currentWeatherData, setCurrentWeather] = React.useState(null);
-    const [triHourlyWeatherData, setTriHourlyWeatherData] = React.useState(null);
-    const [dailyWeatherData, setDailyWeatherData] = React.useState(null)
+    const dispatch = useDispatch()
+    
     const [location, setLocation] = React.useState(props.location)
     const [searchWeather, setSearchWeather] = React.useState(false)
     const [modalOpen, setModalOpen] = React.useState(false)
@@ -43,38 +48,45 @@ export default function CityWeather(props) {
         function loadData() {
             //Current Weather
             try {
+                dispatch(actions.fetchCurrentWeatherPending())
                 fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        setCurrentWeather(data)
+                        dispatch(actions.fetchCurrentWeatherSuccess(data))
+                       
                     })
             } catch (e) {
                 console.log(e)
+                dispatch(actions.fetchCurrentWeatherError(e))
             }
             //TriHourlyWeather
             try {
+                dispatch(actions.fetchTriHourlyWeatherPending())
                 fetch('http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        setDailyWeatherData(data)
+                        
                         for (let x = 0; x < 25; x++) {
                             data.list.pop()
                         }
-                        setTriHourlyWeatherData(data)
-
+                        dispatch(actions.fetchTriHourlyWeatherSuccess(data))
                     })
             } catch (e) {
                 console.log(e)
+                dispatch(actions.fetchTriHourlyWeatherError(e))
             }
             //DailyWeather
             try {
+                dispatch(actions.fetchDailyWeatherPending())
                 fetch('http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        setDailyWeatherData(data)
+                        
+                        dispatch(actions.fetchDailyWeatherSuccess(data))
                     })
             } catch (e) {
                 console.log(e)
+                dispatch(actions.fetchDailyWeatherError(e))
             }
 
             return function cleanup() {
@@ -93,10 +105,15 @@ export default function CityWeather(props) {
         return dayOfWeek
     }
 
+    const currentWeatherData = useSelector(state => state.weather.currentWeatherData)
+    const triHourlyWeatherData = useSelector(state => state.weather.triHourlyWeatherData)
+    const dailyWeatherData = useSelector(state => state.weather.dailyWeatherData)
+
     if (currentWeatherData === null || triHourlyWeatherData === null || dailyWeatherData == null) {
         return null
     }
     else {
+    
         const cityName = currentWeatherData.name
         const weatherDescription = _.startCase(_.toLower(currentWeatherData.weather[0].description))
         const currentTemperature = currentWeatherData.main.temp.toFixed(0)
@@ -115,6 +132,7 @@ export default function CityWeather(props) {
                             <Text style={styles.currentCityTemperature}>{currentTemperature}</Text>
                             <MaterialCommunityIcons name="temperature-fahrenheit" size={40} color="white" />
                         </View>
+
                     </View>
 
                     <View style={globalStyles.dateAndHighLowView}>
