@@ -14,7 +14,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 const middlewares=[thunk];
 
 const rootReducer = combineReducers({
-  test: testreducer
+  weather: testreducer
 })
 
 

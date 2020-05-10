@@ -25,12 +25,7 @@ import { useSelector, useDispatch } from 'react-redux'
 
 export default function CityWeather(props) {
     const dispatch = useDispatch()
-
-    const test = useSelector(state => state.test.counter)
-
-    const [currentWeatherData, setCurrentWeather] = React.useState(null);
-    const [triHourlyWeatherData, setTriHourlyWeatherData] = React.useState(null);
-    const [dailyWeatherData, setDailyWeatherData] = React.useState(null)
+    
     const [location, setLocation] = React.useState(props.location)
     const [modalOpen, setModalOpen] = React.useState(false)
 
@@ -44,41 +39,45 @@ export default function CityWeather(props) {
         function loadData() {
             //Current Weather
             try {
-                dispatch(actions.fetchWeatherPending())
+                dispatch(actions.fetchCurrentWeatherPending())
                 fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        dispatch(actions.fetchWeatherSuccess(data))
-                        setCurrentWeather(data)
+                        dispatch(actions.fetchCurrentWeatherSuccess(data))
+                       
                     })
             } catch (e) {
                 console.log(e)
-                dispatch(actions.fetchWeatherError(e))
+                dispatch(actions.fetchCurrentWeatherError(e))
             }
             //TriHourlyWeather
             try {
+                dispatch(actions.fetchTriHourlyWeatherPending())
                 fetch('http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        setDailyWeatherData(data)
+                        
                         for (let x = 0; x < 25; x++) {
                             data.list.pop()
                         }
-                        setTriHourlyWeatherData(data)
-
+                        dispatch(actions.fetchTriHourlyWeatherSuccess(data))
                     })
             } catch (e) {
                 console.log(e)
+                dispatch(actions.fetchTriHourlyWeatherError(e))
             }
             //DailyWeather
             try {
+                dispatch(actions.fetchDailyWeatherPending())
                 fetch('http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        setDailyWeatherData(data)
+                        
+                        dispatch(actions.fetchDailyWeatherSuccess(data))
                     })
             } catch (e) {
                 console.log(e)
+                dispatch(actions.fetchDailyWeatherError(e))
             }
 
             return function cleanup() {
@@ -97,14 +96,15 @@ export default function CityWeather(props) {
         return dayOfWeek
     }
 
-    //const data = useSelector(state => state.test.weather)
+    const currentWeatherData = useSelector(state => state.weather.currentWeatherData)
+    const triHourlyWeatherData = useSelector(state => state.weather.triHourlyWeatherData)
+    const dailyWeatherData = useSelector(state => state.weather.dailyWeatherData)
 
     if (currentWeatherData === null || triHourlyWeatherData === null || dailyWeatherData == null) {
         return null
     }
     else {
-        
-        console.log(data)
+    
         const cityName = currentWeatherData.name
         const weatherDescription = _.startCase(_.toLower(currentWeatherData.weather[0].description))
         const currentTemperature = currentWeatherData.main.temp.toFixed(0)
@@ -118,9 +118,6 @@ export default function CityWeather(props) {
                 <View style={styles.currentForecast}>
 
                     <Ionicons name="ios-search" visible={modalOpen} fade={1000} size={32} color="white" onPress={() => setModalOpen(true)} />
-                    
-                    <Button title="Redux" onPress={() => dispatch(actions.changeCount(2))} />
-                    <Text style={styles.cityName}>{test}</Text>
                     <Text style={styles.cityName}>{cityName}</Text>
                     <Text style={styles.currentCityWeatherDescription}>{weatherDescription}</Text>
                     <View style={styles.currentCityTemperatureView}>
