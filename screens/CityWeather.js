@@ -14,11 +14,14 @@ import * as actions from  '../redux/actions/testaction';
 import { useSelector, useDispatch } from 'react-redux'
 
 
-//TODO
-//Either figure out a search mechanic or keep going with the map thing
-//Test on other screen devices
-//Dynamic background
-//Look into animation for some things?
+//REDUX
+//When to make the initial call to the API
+//I'll need to make subsequent calls when the Search functionality is implemented
+//For now, I make one call. But I want redux for the Celsius and Farenhight shit
+                //Leave the API call here and then create an action to assign the state this new data
+                //Make API call in the reducers, might need react-thunk https://dev.to/markusclaus/fetching-data-from-an-api-using-reactredux-55ao
+
+//ITS WORKING IN REDUX NOW
 
 export default function CityWeather(props) {
     const dispatch = useDispatch()
@@ -41,13 +44,16 @@ export default function CityWeather(props) {
         function loadData() {
             //Current Weather
             try {
+                dispatch(actions.fetchWeatherPending())
                 fetch('http://api.openweathermap.org/data/2.5/weather?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
+                        dispatch(actions.fetchWeatherSuccess(data))
                         setCurrentWeather(data)
                     })
             } catch (e) {
                 console.log(e)
+                dispatch(actions.fetchWeatherError(e))
             }
             //TriHourlyWeather
             try {
@@ -91,10 +97,14 @@ export default function CityWeather(props) {
         return dayOfWeek
     }
 
+    //const data = useSelector(state => state.test.weather)
+
     if (currentWeatherData === null || triHourlyWeatherData === null || dailyWeatherData == null) {
         return null
     }
     else {
+        
+        console.log(data)
         const cityName = currentWeatherData.name
         const weatherDescription = _.startCase(_.toLower(currentWeatherData.weather[0].description))
         const currentTemperature = currentWeatherData.main.temp.toFixed(0)
