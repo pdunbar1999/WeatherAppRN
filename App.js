@@ -69,9 +69,11 @@ export default function App(props) {
   } else {
 
     return (
+
       <Provider store={store}>
       <CityWeather location={location} />
       </Provider>
+
       
 
     )
