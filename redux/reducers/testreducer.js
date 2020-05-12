@@ -73,16 +73,24 @@ export default (state = INITIAL_STATE, action) => {
                 error: action.error
             }
         case SWITCH_TEMP_TYPE:
-            const newCurrentWeatherData = currentWeatherData
-            if(action.type === true) {
-                
-            }
+            console.log('switch')
+            const newCurrentWeatherData = action.data
+           
+            newCurrentWeatherData.main.temp = farenheightToCelsius(action.data.main.temp)
+            newCurrentWeatherData.main.temp_max = farenheightToCelsius(action.data.main.temp_max)
+            newCurrentWeatherData.main.temp_min = farenheightToCelsius(action.data.main.temp_min)
+            
             return {
-                ...state
+                ...state,
+                currentWeatherData: {...newCurrentWeatherData}
             }
 
         default:
             return state
     }
 
+}
+
+function farenheightToCelsius(temp) {
+    return ((temp - 32)/ 1.8)
 }

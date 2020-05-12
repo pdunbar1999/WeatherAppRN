@@ -119,7 +119,8 @@ export default function CityWeather(props) {
         const currentTemperature = currentWeatherData.main.temp.toFixed(0)
         const todaysHigh = currentWeatherData.main.temp_max.toFixed(0)
         const todaysLow = currentWeatherData.main.temp_min.toFixed(0)
-        const dayOfWeek = convertUnixToDayOfWeek(currentWeatherData.dt);
+        const dayOfWeek = convertUnixToDayOfWeek(currentWeatherData.dt)
+        console.log(currentTemperature)
 
         return (
             <View style={{ flex: 1, backgroundColor: '#1C9CF6' }}>
