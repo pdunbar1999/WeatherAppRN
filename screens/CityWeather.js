@@ -1,6 +1,5 @@
 import * as React from 'react'
-import { View, Text, ScrollView, Button, TextInput } from 'react-native';
-import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
+import { View, Text, ScrollView} from 'react-native';
 import HourlyWeather from '../components/HourlyWeather'
 import _ from 'lodash'
 //import dailyWeatherData from '../dummy-data/triHourlyWeatherData'
@@ -13,8 +12,9 @@ import EStyleSheet from 'react-native-extended-stylesheet';
 
 import Footer from '../components/footer'
 import Modal from '../components/Modal'
+import WeatherTypeIcon from '../components/WeatherTypeIcon'
 
-import * as actions from  '../redux/actions/testaction';
+import * as actions from  '../redux/actions/action';
 import { useSelector, useDispatch } from 'react-redux'
 
 
@@ -30,9 +30,6 @@ import { useSelector, useDispatch } from 'react-redux'
 
 export default function CityWeather(props) {
     const dispatch = useDispatch()
-    
-    const [location, setLocation] = React.useState(props.location)
-    const [searchWeather, setSearchWeather] = React.useState(false)
     const [modalOpen, setModalOpen] = React.useState(false)
 
     const [lat, setLat] = React.useState(props.location.coords.latitude)
@@ -120,7 +117,6 @@ export default function CityWeather(props) {
         const todaysHigh = currentWeatherData.main.temp_max.toFixed(0)
         const todaysLow = currentWeatherData.main.temp_min.toFixed(0)
         const dayOfWeek = convertUnixToDayOfWeek(currentWeatherData.dt)
-        console.log(currentTemperature)
 
         return (
             <View style={{ flex: 1, backgroundColor: '#1C9CF6' }}>
@@ -131,7 +127,7 @@ export default function CityWeather(props) {
                         <Text style={styles.currentCityWeatherDescription}>{weatherDescription}</Text>
                         <View style={styles.currentCityTemperatureView}>
                             <Text style={styles.currentCityTemperature}>{currentTemperature}</Text>
-                            <MaterialCommunityIcons name="temperature-fahrenheit" size={40} color="white" />
+                            <WeatherTypeIcon size={40} />
                         </View>
 
                     </View>
@@ -155,7 +151,7 @@ export default function CityWeather(props) {
 
                     <View style={styles.futureForecast}>
                         {dailyWeatherData.list.filter(dailyWeatherData => dailyWeatherData.dt_txt.split(" ")[1] === "12:00:00").map(dailyWeatherData => {
-                            return <DailyWeather dailyWeatherData={dailyWeatherData} convertUnixToDayOfWeek={convertUnixToDayOfWeek} key={Math.random(100000)} />
+                            return <DailyWeather dailyWeatherData={dailyWeatherData} convertUnixToDayOfWeek={convertUnixToDayOfWeek} key={Math.random(100000)} size={15}/>
                         })}
                     </View>
 

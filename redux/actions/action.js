@@ -72,9 +72,8 @@ export const fetchDailyWeatherError = (error) => {
     }
 }
 
-export const switchTempType = (data) => {
+export const switchTempType = () => {
     return {
-        type: SWITCH_TEMP_TYPE,
-        data: data
+        type: SWITCH_TEMP_TYPE
     }
 }

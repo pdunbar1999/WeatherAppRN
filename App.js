@@ -8,13 +8,13 @@ import * as Location from 'expo-location';
 import { Provider } from 'react-redux';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk'
-import testreducer from './redux/reducers/testreducer';
+import reducer from './redux/reducers/reducer';
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 const middlewares=[thunk];
 
 const rootReducer = combineReducers({
-  weather: testreducer
+  weather: reducer
 })
 
 
