@@ -78,19 +78,26 @@ export default (state = INITIAL_STATE, action) => {
             //const newCurrentWeatherData = action.data
             const newCurrentWeatherData = state.currentWeatherData
             const newTriHourlyWeatherData = state.triHourlyWeatherData
+            const newDailyWeatherData = state.dailyWeatherData
             //Weather is curerntly in Farenheight and we want to convert into Celsius
             if(state.weatherType === 'F') {
-                newCurrentWeatherData.main.temp = farenheightToCelsius(newCurrentWeatherData.main.temp)
+                newCurrentWeatherData.main.temp = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp)
                 newCurrentWeatherData.main.temp_max = farenheightToCelsius(newCurrentWeatherData.main.temp_max)
                 newCurrentWeatherData.main.temp_min = farenheightToCelsius(newCurrentWeatherData.main.temp_min)
 
                 for(let i = 0; i < newTriHourlyWeatherData.list.length; i++){
                     newTriHourlyWeatherData.list[i].main.temp = farenheightToCelsius(newTriHourlyWeatherData.list[i].main.temp)
                 }
+
+                for(let i = 0; i < newDailyWeatherData.list.length; i++) {
+                    newDailyWeatherData.list[i].main.temp_max = farenheightToCelsius(newDailyWeatherData.list[i].main.temp_max)
+                    newDailyWeatherData.list[i].main.temp_min = farenheightToCelsius(newDailyWeatherData.list[i].main.temp_min)
+                }
                 return {
                     ...state,
                     currentWeatherData: {...newCurrentWeatherData},
                     triHourlyWeatherData: {...newTriHourlyWeatherData},
+                    dailyWeatherData: {...newDailyWeatherData},
                     weatherType: 'C'
                 }
             } 
@@ -103,10 +110,16 @@ export default (state = INITIAL_STATE, action) => {
                     newTriHourlyWeatherData.list[i].main.temp = celsiusToFarenheight(newTriHourlyWeatherData.list[i].main.temp)
                 }
 
+                for(let i = 0; i < newDailyWeatherData.list.length; i++) {
+                    newDailyWeatherData.list[i].main.temp_max = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_max)
+                    newDailyWeatherData.list[i].main.temp_min = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_min)
+                }
+
                 return {
                     ...state,
                     currentWeatherData: {...newCurrentWeatherData},
                     triHourlyWeatherData: {...newTriHourlyWeatherData},
+                    dailyWeatherData: {...newDailyWeatherData},
                     weatherType: 'F'
                 }
             }
@@ -127,4 +140,13 @@ function farenheightToCelsius(temp) {
 
 function celsiusToFarenheight(temp) {
     return ((temp * 1.8) + 32)
+}
+
+function checkConversion(type) {
+    if(type === "F"){
+        return farenheightToCelsius
+    }
+    else {
+        return celsiusToFarenheight
+    }
 }
