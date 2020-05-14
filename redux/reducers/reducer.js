@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux';
-import { FETCH_CURRENTWEATHER_PENDING, FETCH_CURRENTWEATHER_ERROR, FETCH_CURRENTWEATHER_SUCCESS,
-        FETCH_TRIHOURLYWEATHER_ERROR, FETCH_TRIHOURLYWEATHER_PENDING, FETCH_TRIHOURLYWEATHER_SUCCESS,
-        FETCH_DAILYWEATHER_ERROR, FETCH_DAILYWEATHER_PENDING, FETCH_DAILYWEATHER_SUCCESS,
-        SWITCH_TEMP_TYPE } from '../actions/action'
+import {
+    FETCH_CURRENTWEATHER_PENDING, FETCH_CURRENTWEATHER_ERROR, FETCH_CURRENTWEATHER_SUCCESS,
+    FETCH_TRIHOURLYWEATHER_ERROR, FETCH_TRIHOURLYWEATHER_PENDING, FETCH_TRIHOURLYWEATHER_SUCCESS,
+    FETCH_DAILYWEATHER_ERROR, FETCH_DAILYWEATHER_PENDING, FETCH_DAILYWEATHER_SUCCESS,
+    SWITCH_TEMP_TYPE
+} from '../actions/action'
 
 
 const INITIAL_STATE = {
@@ -34,7 +36,7 @@ export default (state = INITIAL_STATE, action) => {
                 error: action.error
             }
         }
-        case FETCH_TRIHOURLYWEATHER_SUCCESS: 
+        case FETCH_TRIHOURLYWEATHER_SUCCESS:
             return {
                 ...state,
                 pending: false,
@@ -46,11 +48,11 @@ export default (state = INITIAL_STATE, action) => {
                 pending: true
             }
         case FETCH_TRIHOURLYWEATHER_ERROR:
-            return{
+            return {
                 ...state,
                 error: action.error
             }
-        case FETCH_DAILYWEATHER_ERROR: 
+        case FETCH_DAILYWEATHER_ERROR:
             return {
                 ...state,
                 pending: false,
@@ -75,58 +77,54 @@ export default (state = INITIAL_STATE, action) => {
             }
         case SWITCH_TEMP_TYPE:
             //This button is only going to be called when the C/F button is pressed in the footer
-            //const newCurrentWeatherData = action.data
             const newCurrentWeatherData = state.currentWeatherData
             const newTriHourlyWeatherData = state.triHourlyWeatherData
             const newDailyWeatherData = state.dailyWeatherData
-            //Weather is curerntly in Farenheight and we want to convert into Celsius
-            if(state.weatherType === 'F') {
-                newCurrentWeatherData.main.temp = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp)
-                newCurrentWeatherData.main.temp_max = farenheightToCelsius(newCurrentWeatherData.main.temp_max)
-                newCurrentWeatherData.main.temp_min = farenheightToCelsius(newCurrentWeatherData.main.temp_min)
+            let newWeatherType = state.weatherType
+            {newWeatherType === "F" ? (newWeatherType = "C") : (newWeatherType = "F")}
+            newCurrentWeatherData.main.temp = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp)
+            newCurrentWeatherData.main.temp_max = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp_max)
+            newCurrentWeatherData.main.temp_min = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp_min)
 
-                for(let i = 0; i < newTriHourlyWeatherData.list.length; i++){
-                    newTriHourlyWeatherData.list[i].main.temp = farenheightToCelsius(newTriHourlyWeatherData.list[i].main.temp)
-                }
-
-                for(let i = 0; i < newDailyWeatherData.list.length; i++) {
-                    newDailyWeatherData.list[i].main.temp_max = farenheightToCelsius(newDailyWeatherData.list[i].main.temp_max)
-                    newDailyWeatherData.list[i].main.temp_min = farenheightToCelsius(newDailyWeatherData.list[i].main.temp_min)
-                }
-                return {
-                    ...state,
-                    currentWeatherData: {...newCurrentWeatherData},
-                    triHourlyWeatherData: {...newTriHourlyWeatherData},
-                    dailyWeatherData: {...newDailyWeatherData},
-                    weatherType: 'C'
-                }
-            } 
-            else {
-                newCurrentWeatherData.main.temp = celsiusToFarenheight(newCurrentWeatherData.main.temp)
-                newCurrentWeatherData.main.temp_max = celsiusToFarenheight(newCurrentWeatherData.main.temp_max)
-                newCurrentWeatherData.main.temp_min = celsiusToFarenheight(newCurrentWeatherData.main.temp_min)
-
-                for(let i = 0; i < newTriHourlyWeatherData.list.length; i++){
-                    newTriHourlyWeatherData.list[i].main.temp = celsiusToFarenheight(newTriHourlyWeatherData.list[i].main.temp)
-                }
-
-                for(let i = 0; i < newDailyWeatherData.list.length; i++) {
-                    newDailyWeatherData.list[i].main.temp_max = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_max)
-                    newDailyWeatherData.list[i].main.temp_min = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_min)
-                }
-
-                return {
-                    ...state,
-                    currentWeatherData: {...newCurrentWeatherData},
-                    triHourlyWeatherData: {...newTriHourlyWeatherData},
-                    dailyWeatherData: {...newDailyWeatherData},
-                    weatherType: 'F'
-                }
+            for (let i = 0; i < newTriHourlyWeatherData.list.length; i++) {
+                newTriHourlyWeatherData.list[i].main.temp = checkConversion(state.weatherType)(newTriHourlyWeatherData.list[i].main.temp)
             }
-           
-           
-            
-            
+
+            for (let i = 0; i < newDailyWeatherData.list.length; i++) {
+                newDailyWeatherData.list[i].main.temp_max = checkConversion(state.weatherType)(newDailyWeatherData.list[i].main.temp_max)
+                newDailyWeatherData.list[i].main.temp_min = checkConversion(state.weatherType)(newDailyWeatherData.list[i].main.temp_min)
+            }
+            return {
+                ...state,
+                currentWeatherData: { ...newCurrentWeatherData },
+                triHourlyWeatherData: { ...newTriHourlyWeatherData },
+                dailyWeatherData: { ...newDailyWeatherData },
+                weatherType: newWeatherType
+            }
+
+            // else {
+            //     newCurrentWeatherData.main.temp = celsiusToFarenheight(newCurrentWeatherData.main.temp)
+            //     newCurrentWeatherData.main.temp_max = celsiusToFarenheight(newCurrentWeatherData.main.temp_max)
+            //     newCurrentWeatherData.main.temp_min = celsiusToFarenheight(newCurrentWeatherData.main.temp_min)
+
+            //     for(let i = 0; i < newTriHourlyWeatherData.list.length; i++){
+            //         newTriHourlyWeatherData.list[i].main.temp = celsiusToFarenheight(newTriHourlyWeatherData.list[i].main.temp)
+            //     }
+
+            //     for(let i = 0; i < newDailyWeatherData.list.length; i++) {
+            //         newDailyWeatherData.list[i].main.temp_max = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_max)
+            //         newDailyWeatherData.list[i].main.temp_min = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_min)
+            //     }
+
+            //     return {
+            //         ...state,
+            //         currentWeatherData: {...newCurrentWeatherData},
+            //         triHourlyWeatherData: {...newTriHourlyWeatherData},
+            //         dailyWeatherData: {...newDailyWeatherData},
+            //         weatherType: 'F'
+            //     }
+
+
 
         default:
             return state
@@ -135,7 +133,7 @@ export default (state = INITIAL_STATE, action) => {
 }
 
 function farenheightToCelsius(temp) {
-    return ((temp - 32)/ 1.8)
+    return ((temp - 32) / 1.8)
 }
 
 function celsiusToFarenheight(temp) {
@@ -143,7 +141,7 @@ function celsiusToFarenheight(temp) {
 }
 
 function checkConversion(type) {
-    if(type === "F"){
+    if (type === "F") {
         return farenheightToCelsius
     }
     else {
