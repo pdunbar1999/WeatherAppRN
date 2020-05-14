@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image } from 'react-native'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import { images } from '../assets/global'
 import { globalStyles } from '../assets/global'
+import WeatherTypeIcon from '../components/WeatherTypeIcon'
+
 export default function HourlyWeather(props) {
     function convertUnixToHour(unixTimeStamp) {
         const dateObject = new Date(unixTimeStamp * 1000);
@@ -19,7 +21,7 @@ export default function HourlyWeather(props) {
             <Image style={styles.weatherImage} source={images.weatherIcons[weatherIcon]} />
             <View style={styles.hourlyTemp}>
                 <Text style={styles.timeTemp}>{temp}</Text>
-                <MaterialCommunityIcons style={styles.iconFaren} name="temperature-fahrenheit" size={15} color="white" />
+                <WeatherTypeIcon size={props.size} />
             </View>
         </View>
     )
