@@ -59,6 +59,7 @@ export default function App(props) {
 
   // console.log(JSON.stringify(location))
 
+
   const screenWidth = Dimensions.get('window').width
   EStyleSheet.build({
     $rem: screenWidth / 380
@@ -72,8 +73,7 @@ export default function App(props) {
 
       <Provider store={store}>
       <CityWeather location={location} />
-      </Provider>
-
+      </Provider> 
       
 
     )
