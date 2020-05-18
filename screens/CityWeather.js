@@ -17,6 +17,8 @@ import WeatherTypeIcon from '../components/WeatherTypeIcon'
 import * as actions from '../redux/actions/action';
 import { useSelector, useDispatch } from 'react-redux'
 
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
+
 
 
 //REDUX
@@ -120,8 +122,9 @@ export default function CityWeather(props) {
 
         return (
             <View style={{ flex: 1, backgroundColor: '#1C9CF6' }}>
+            <Modal modalOpen={modalOpen} setModalOpen={setModalOpen} setLat={setLat} setLon={setLon} />
                 <ScrollView contentContainerStyle={styles.container}>
-                    <Modal modalOpen={modalOpen} setModalOpen={setModalOpen} />
+                    
                     <View style={styles.currentForecast}>
                         <Text style={styles.cityName}>{cityName}</Text>
                         <Text style={styles.currentCityWeatherDescription}>{weatherDescription}</Text>
