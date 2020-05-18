@@ -95,7 +95,9 @@ export default function CityWeather(props) {
         loadData()
 
 
-    }, [lat, lon])
+    }, [lon])
+    //lon here because lon is changed last compared to lat in the modal. This means only 1 re render will happen. shouldComponentUpdate()
+    
 
     function convertUnixToDayOfWeek(unixTimeStamp) {
         const milliseconds = unixTimeStamp * 1000

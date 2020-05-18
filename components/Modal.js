@@ -24,58 +24,7 @@ export default function modal(props) {
             }}
         >
             <View style={styles.modalView}>
-                {/* <GooglePlacesAutocomplete
-                    placeholder="Enter city, zip code, or airport location"
-                    query={{
-                        key: 'AIzaSyBBQImfeo7AwHxoxaGSwQJGJXQyc_mFuRE',
-                        language: 'en', // language of the results,
-                        components: 'country:us'
-                    }}
-                    keyboardShouldPersistTaps = {'handled'}
-                    currentLocation={true}
-                    currentLocationLabel='Current Location'
-                    fetchDetails={true}
-                    minLength={2}
-                    keyboardShouldPersistTaps="handled"
-                    onPress={(data, details={}) => {
-                        //console.log(data, details)
-                        console.log('hello')
-                    }}
-                    returnKeyType={'default'}
-                    GooglePlacesDetailsQuery={{
-                        fields: 'geometry, utc_offset'
-                    }}
-                    GooglePlacesSearchQuery={{
-                        rankby: 'distance',
-                        type:'cafe'
-                    }}
-                    nearbyPlacesAPI={"GoogleReverseGeocoding"}
-                    onFail={error => console.error(error)}
-                    renderRightButton={() => <Text onPress={() => props.setModalOpen(false)} style={styles.cancelButton}>Cancel</Text>}
-                    styles={{
-                        textInputContainer: {
-                            marginLeft: 0,
-                            backgroundColor: 'rgba(0,0,0,0)',
-                            borderTopWidth: 0,
-                            borderBottomWidth: 0,
-                            width: '100%'
-                        },
-                        textInput: {
-                            height: 38,
-                            color: '#5d5d5d',
-                            fontSize: 16,
-                        },
-                        predefinedPlacesDescription: {
-                            color: 'black',
-                        },
-                        description: {
-                            fontWeight: 'bold'
-                        }
-                        
-                    }}
-                /> */}
                 <GooglePlacesAutocomplete
-                    //ref = {ref => setSearchTextRef(ref)}
                     placeholder='Enter city, zip code, or airport location'
                     renderRightButton={() => <Text onPress={() => props.setModalOpen(false)} style={styles.cancelButton}>Cancel</Text>}
                     keyboardShouldPersistTaps={'handled'}
@@ -86,19 +35,16 @@ export default function modal(props) {
                     listViewDisplayed={'auto'}   // true/false/undefined
                     fetchDetails={true}
                     onPress={(data, details = null) => {
-                        //console.log(data)
                         let coordinates = details.geometry.location;
                         props.setLat(coordinates.lat)
                         props.setLon(coordinates.lng)
                         props.setModalOpen(false)
-                        //console.log('hello')
-                        //sendCoordinates(coordinates, {data, details});
                     }}
                     getDefaultValue={() => ''}
                     query={{
                         key: 'AIzaSyBBQImfeo7AwHxoxaGSwQJGJXQyc_mFuRE',
                         language: 'en', // language of the results
-                        // types: '(cities)' // default: 'geocode'
+                        types: '(cities)' // default: 'geocode'
                     }}
                     nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
                     GooglePlacesSearchQuery={{
