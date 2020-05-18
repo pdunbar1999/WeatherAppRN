@@ -89,8 +89,7 @@ export default function modal(props) {
                         //console.log(data)
                         let coordinates = details.geometry.location;
                         props.setLat(coordinates.lat)
-                        props.setLon(coordinates.lon)
-                        
+                        props.setLon(coordinates.lng)
                         props.setModalOpen(false)
                         //console.log('hello')
                         //sendCoordinates(coordinates, {data, details});

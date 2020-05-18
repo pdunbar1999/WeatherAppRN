@@ -88,14 +88,14 @@ export default function CityWeather(props) {
                 dispatch(actions.fetchDailyWeatherError(e))
             }
 
-            return function cleanup() {
-                abortController.abort()
-            }
+            // return function cleanup() {
+            //     abortController.abort()
+            // }
         }
         loadData()
 
 
-    }, [])
+    }, [lat, lon])
 
     function convertUnixToDayOfWeek(unixTimeStamp) {
         const milliseconds = unixTimeStamp * 1000
