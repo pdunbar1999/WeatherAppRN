@@ -102,28 +102,6 @@ export default (state = INITIAL_STATE, action) => {
                 weatherType: newWeatherType
             }
 
-            // else {
-            //     newCurrentWeatherData.main.temp = celsiusToFarenheight(newCurrentWeatherData.main.temp)
-            //     newCurrentWeatherData.main.temp_max = celsiusToFarenheight(newCurrentWeatherData.main.temp_max)
-            //     newCurrentWeatherData.main.temp_min = celsiusToFarenheight(newCurrentWeatherData.main.temp_min)
-
-            //     for(let i = 0; i < newTriHourlyWeatherData.list.length; i++){
-            //         newTriHourlyWeatherData.list[i].main.temp = celsiusToFarenheight(newTriHourlyWeatherData.list[i].main.temp)
-            //     }
-
-            //     for(let i = 0; i < newDailyWeatherData.list.length; i++) {
-            //         newDailyWeatherData.list[i].main.temp_max = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_max)
-            //         newDailyWeatherData.list[i].main.temp_min = celsiusToFarenheight(newDailyWeatherData.list[i].main.temp_min)
-            //     }
-
-            //     return {
-            //         ...state,
-            //         currentWeatherData: {...newCurrentWeatherData},
-            //         triHourlyWeatherData: {...newTriHourlyWeatherData},
-            //         dailyWeatherData: {...newDailyWeatherData},
-            //         weatherType: 'F'
-            //     }
-
 
 
         default:

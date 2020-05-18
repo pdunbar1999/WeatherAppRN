@@ -10,7 +10,7 @@ import { createStore, combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk'
 import reducer from './redux/reducers/reducer';
 import { composeWithDevTools } from 'redux-devtools-extension'
-
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 const middlewares=[thunk];
 
 const rootReducer = combineReducers({
@@ -59,6 +59,7 @@ export default function App(props) {
 
   // console.log(JSON.stringify(location))
 
+
   const screenWidth = Dimensions.get('window').width
   EStyleSheet.build({
     $rem: screenWidth / 380
@@ -71,9 +72,12 @@ export default function App(props) {
     return (
 
       <Provider store={store}>
-      <CityWeather location={location} />
-      </Provider>
-
+       
+       <CityWeather location={location} /> 
+       
+       
+      </Provider>  
+      
       
 
     )

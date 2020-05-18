@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { View, Text, ScrollView} from 'react-native';
+import { View, Text, ScrollView } from 'react-native';
 import HourlyWeather from '../components/HourlyWeather'
 import _ from 'lodash'
 //import dailyWeatherData from '../dummy-data/triHourlyWeatherData'
@@ -14,8 +14,10 @@ import Footer from '../components/footer'
 import Modal from '../components/Modal'
 import WeatherTypeIcon from '../components/WeatherTypeIcon'
 
-import * as actions from  '../redux/actions/action';
+import * as actions from '../redux/actions/action';
 import { useSelector, useDispatch } from 'react-redux'
+
+import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
 
 
 
@@ -23,8 +25,8 @@ import { useSelector, useDispatch } from 'react-redux'
 //When to make the initial call to the API
 //I'll need to make subsequent calls when the Search functionality is implemented
 //For now, I make one call. But I want redux for the Celsius and Farenhight shit
-                //Leave the API call here and then create an action to assign the state this new data
-                //Make API call in the reducers, might need react-thunk https://dev.to/markusclaus/fetching-data-from-an-api-using-reactredux-55ao
+//Leave the API call here and then create an action to assign the state this new data
+//Make API call in the reducers, might need react-thunk https://dev.to/markusclaus/fetching-data-from-an-api-using-reactredux-55ao
 
 //ITS WORKING IN REDUX NOW
 
@@ -50,7 +52,7 @@ export default function CityWeather(props) {
                     .then(results => results.json())
                     .then(data => {
                         dispatch(actions.fetchCurrentWeatherSuccess(data))
-                       
+
                     })
             } catch (e) {
                 console.log(e)
@@ -62,7 +64,7 @@ export default function CityWeather(props) {
                 fetch('http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        
+
                         for (let x = 0; x < 25; x++) {
                             data.list.pop()
                         }
@@ -78,7 +80,7 @@ export default function CityWeather(props) {
                 fetch('http://api.openweathermap.org/data/2.5/forecast?lat=' + lat + '&lon=' + lon + '&units=imperial&appid=ad02902f06d3896862c43355dec445b9', { signal: signal })
                     .then(results => results.json())
                     .then(data => {
-                        
+
                         dispatch(actions.fetchDailyWeatherSuccess(data))
                     })
             } catch (e) {
@@ -86,14 +88,16 @@ export default function CityWeather(props) {
                 dispatch(actions.fetchDailyWeatherError(e))
             }
 
-            return function cleanup() {
-                abortController.abort()
-            }
+            // return function cleanup() {
+            //     abortController.abort()
+            // }
         }
         loadData()
 
 
-    }, [])
+    }, [lon])
+    //lon here because lon is changed last compared to lat in the modal. This means only 1 re render will happen. shouldComponentUpdate()
+    
 
     function convertUnixToDayOfWeek(unixTimeStamp) {
         const milliseconds = unixTimeStamp * 1000
@@ -110,7 +114,7 @@ export default function CityWeather(props) {
         return null
     }
     else {
-    
+
         const cityName = currentWeatherData.name
         const weatherDescription = _.startCase(_.toLower(currentWeatherData.weather[0].description))
         const currentTemperature = currentWeatherData.main.temp.toFixed(0)
@@ -120,8 +124,9 @@ export default function CityWeather(props) {
 
         return (
             <View style={{ flex: 1, backgroundColor: '#1C9CF6' }}>
+            <Modal modalOpen={modalOpen} setModalOpen={setModalOpen} setLat={setLat} setLon={setLon} />
                 <ScrollView contentContainerStyle={styles.container}>
-                    <Modal modalOpen={modalOpen} setModalOpen={setModalOpen}/>
+                    
                     <View style={styles.currentForecast}>
                         <Text style={styles.cityName}>{cityName}</Text>
                         <Text style={styles.currentCityWeatherDescription}>{weatherDescription}</Text>
@@ -151,7 +156,7 @@ export default function CityWeather(props) {
 
                     <View style={styles.futureForecast}>
                         {dailyWeatherData.list.filter(dailyWeatherData => dailyWeatherData.dt_txt.split(" ")[1] === "12:00:00").map(dailyWeatherData => {
-                            return <DailyWeather dailyWeatherData={dailyWeatherData} convertUnixToDayOfWeek={convertUnixToDayOfWeek} key={Math.random(100000)} size={15}/>
+                            return <DailyWeather dailyWeatherData={dailyWeatherData} convertUnixToDayOfWeek={convertUnixToDayOfWeek} key={Math.random(100000)} size={15} />
                         })}
                     </View>
 
