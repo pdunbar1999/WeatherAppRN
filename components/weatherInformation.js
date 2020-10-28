@@ -22,7 +22,7 @@ export default function weatherInformation(props) {
     const windDirection = d2d(props.currentWeatherData.wind.deg).toString()
     const humidity = props.currentWeatherData.main.humidity
     const pressure = props.currentWeatherData.main.pressure
-    const feelsLike = props.currentWeatherData.main.feels_like
+    const feelsLike = props.currentWeatherData.main.feels_like.toFixed(0)
 
     return (
         <View style={styles.container}>

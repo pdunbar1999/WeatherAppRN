@@ -121,6 +121,7 @@ export default function CityWeather(props) {
         const todaysHigh = currentWeatherData.main.temp_max.toFixed(0)
         const todaysLow = currentWeatherData.main.temp_min.toFixed(0)
         const dayOfWeek = convertUnixToDayOfWeek(currentWeatherData.dt)
+        //const dayOfWeek = "Sunday"
 
         return (
             <View style={{ flex: 1, backgroundColor: '#1C9CF6' }}>

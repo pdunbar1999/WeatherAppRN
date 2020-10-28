@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     footerView: {
         flexDirection: 'row',
         backgroundColor: 'black',
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        paddingBottom: 15
     }
 })

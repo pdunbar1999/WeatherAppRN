@@ -83,7 +83,7 @@ export default function modal(props) {
 
 const styles = EStyleSheet.create({
     modalView: {
-        paddingTop: 30,
+        paddingTop: 50,
         backgroundColor: '#1C9CF6',
         width: '100%',
         height: '100%',

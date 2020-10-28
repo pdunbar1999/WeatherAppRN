@@ -85,6 +85,7 @@ export default (state = INITIAL_STATE, action) => {
             newCurrentWeatherData.main.temp = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp)
             newCurrentWeatherData.main.temp_max = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp_max)
             newCurrentWeatherData.main.temp_min = checkConversion(state.weatherType)(newCurrentWeatherData.main.temp_min)
+            newCurrentWeatherData.main.feels_like = checkConversion(state.weatherType)(newCurrentWeatherData.main.feels_like)
 
             for (let i = 0; i < newTriHourlyWeatherData.list.length; i++) {
                 newTriHourlyWeatherData.list[i].main.temp = checkConversion(state.weatherType)(newTriHourlyWeatherData.list[i].main.temp)
